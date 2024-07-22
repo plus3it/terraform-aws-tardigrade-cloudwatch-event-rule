@@ -20,8 +20,11 @@ data "aws_partition" "current" {}
 locals {
   event_rules = [
     {
-      name        = "event1"
-      description = random_string.this.result
+      name                = "event1"
+      description         = random_string.this.result
+      schedule_expression = "rate(5 minutes)"
+      event_bus_name      = "default"
+      state               = "ENABLED"
       event_pattern = jsonencode({
         source      = ["aws.codecommit"],
         detail-type = ["${random_string.this.result}"],
@@ -99,6 +102,9 @@ locals {
           }
           sqs_target = {
             message_group_id = "${random_string.this.result}"
+          }
+          retry_policy = {
+            maximum_retry_attempts = 10
           }
         }
       ]
