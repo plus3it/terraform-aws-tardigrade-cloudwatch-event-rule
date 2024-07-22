@@ -37,7 +37,8 @@ variable "event_rule" {
     })), [])
   })
   validation {
-    condition     = var.event_rule.schedule_expression != null && var.event_rule.event_bus_name != "default"
+    condition     = var.event_rule.schedule_expression == null || var.event_rule.event_bus_name == "default"
     error_message = "Scheduled expressions cannot be used on custom event buses"
   }
 }
+
