@@ -41,4 +41,3 @@ variable "event_rule" {
     error_message = "Scheduled expressions cannot be used on custom event buses"
   }
 }
-
