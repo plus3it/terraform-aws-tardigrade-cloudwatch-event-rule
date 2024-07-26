@@ -12,7 +12,7 @@ variable "event_rule" {
       name = string
       arn  = string
 
-      event_bus_name = optional(string)
+      event_bus_name = optional(string, "default")
       role_arn       = optional(string)
       target_id      = optional(string)
 
