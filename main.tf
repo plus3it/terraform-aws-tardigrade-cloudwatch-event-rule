@@ -13,7 +13,7 @@ resource "aws_cloudwatch_event_target" "this" {
   for_each = { for target in var.event_rule.event_targets : target.name => target }
 
   arn            = each.value.arn
-  rule           = aws_cloudwatch_event_rule.this.id
+  rule           = trimprefix(aws_cloudwatch_event_rule.this.id, "${each.value.event_bus_name}/")
   target_id      = each.value.target_id
   role_arn       = each.value.role_arn
   event_bus_name = each.value.event_bus_name
@@ -48,4 +48,6 @@ resource "aws_cloudwatch_event_target" "this" {
 
     }
   }
+
+  depends_on = [aws_cloudwatch_event_rule.this]
 }
