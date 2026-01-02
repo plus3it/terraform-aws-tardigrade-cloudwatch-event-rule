@@ -104,7 +104,8 @@ locals {
             message_group_id = "${random_string.this.result}"
           }
           retry_policy = {
-            maximum_retry_attempts = 10
+            maximum_event_age_in_seconds = 60
+            maximum_retry_attempts       = 10
           }
         }
       ]
