@@ -29,8 +29,8 @@ locals {
         source      = ["aws.codecommit"],
         detail-type = ["${random_string.this.result}"],
         account     = [data.aws_caller_identity.current.account_id],
-        region      = [data.aws_region.current.name],
-        resources   = ["arn:${data.aws_partition.current.partition}:codecommit:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"],
+        region      = [data.aws_region.current.region],
+        resources   = ["arn:${data.aws_partition.current.partition}:codecommit:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"],
         detail = {
           destinationReference = ["${random_string.this.result}"],
           isMerged             = ["${random_string.this.result}"],
@@ -41,7 +41,7 @@ locals {
         #input_transformer dynamic
         {
           name     = "target1"
-          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
+          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
           role_arn = "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:role/service-role/Amazon_EventBridge_Invoke_CodeBuild_1840626416"
           input_transformer = {
             input_paths = {
@@ -53,16 +53,16 @@ locals {
         #dead_letter_config dynamic
         {
           name     = "target2"
-          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
+          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
           role_arn = "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:role/service-role/Amazon_EventBridge_Invoke_CodeBuild_1840626416"
           dead_letter_config = {
-            arn = "arn:${data.aws_partition.current.partition}:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"
+            arn = "arn:${data.aws_partition.current.partition}:sqs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"
           }
         },
         #sqs_target dynamic
         {
           name     = "target3"
-          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
+          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
           role_arn = "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:role/service-role/Amazon_EventBridge_Invoke_CodeBuild_1840626416"
           sqs_target = {
             message_group_id = "${random_string.this.result}"
@@ -77,8 +77,8 @@ locals {
         source      = ["aws.codecommit"],
         detail-type = ["${random_string.this.result}"],
         account     = [data.aws_caller_identity.current.account_id],
-        region      = [data.aws_region.current.name],
-        resources   = ["arn:${data.aws_partition.current.partition}:codecommit:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"],
+        region      = [data.aws_region.current.region],
+        resources   = ["arn:${data.aws_partition.current.partition}:codecommit:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"],
         detail = {
           destinationReference = ["${random_string.this.result}"],
           isMerged             = ["${random_string.this.result}"],
@@ -89,7 +89,7 @@ locals {
         #all dynamics
         {
           name     = "target1"
-          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
+          arn      = "arn:${data.aws_partition.current.partition}:codebuild:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:project/${random_string.this.result}"
           role_arn = "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:role/service-role/Amazon_EventBridge_Invoke_CodeBuild_1840626416"
           input_transformer = {
             input_paths = {
@@ -98,13 +98,14 @@ locals {
             input_template = "{\"destinationVersion\": <destination-version>}"
           }
           dead_letter_config = {
-            arn = "arn:${data.aws_partition.current.partition}:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"
+            arn = "arn:${data.aws_partition.current.partition}:sqs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:${random_string.this.result}"
           }
           sqs_target = {
             message_group_id = "${random_string.this.result}"
           }
           retry_policy = {
-            maximum_retry_attempts = 10
+            maximum_event_age_in_seconds = 60
+            maximum_retry_attempts       = 10
           }
         }
       ]
